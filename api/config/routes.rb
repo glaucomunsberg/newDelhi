@@ -1,5 +1,8 @@
 Api::Application.routes.draw do
   get "api/index"
+  get "api/isOnAir"
+  get "api/about"
+  get "api/paraformalidades"
   get "welcome/index"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -55,7 +58,5 @@ Api::Application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  namespace :api do
-    resources :api
-  end
+
 end
