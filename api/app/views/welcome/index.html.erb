@@ -1,3 +1,52 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
-<h1>Hello, Rails!</h1>
+<html>
+	<head>
+		<meta http-equiv="Constent-Type" content="text/html; charset=utf-8">
+		<title>API NewDalhi - Plataforma Paraformal</title>
+	</head>
+	<body>
+		<h1>API New Dalhi</h1>
+		<p>Seja bem-vindo a API da Plataforma Paraformal.Para interagir com a API NEW DALHI é necessário primeiro adquirir uma chave de acesso para uma das nossas possíveis aplicações, que deverá ser usada em todas as requisições feitas ao serviço que for solicitado. É através desta chave a autenticação do serviço assim com as limitações e os níveis de acesso nos serviços da API.</p>
+		<h2>O que é REST?</h2>
+		<p>Transferência de Estado Representacional (Representational State Transfer) ou somente REST é uma técnica de engenharia de software para sistemas distribuídos, que descreve uma interface web simples que utiliza XML, HTTP, JSON ou texto puro, sem abstrações adicionais dos protocolos baseados em padrões de troca de mensagem como o SOAP.</p>
+		<p><b>Atenção:</b> Atualmente respondemos apenas no formato <b>JSON</b> e <b>XML</b></p>
+		<h2>NewDalhi:Solicitação</h2>
+		<p>
+			Para utilizar a API com php deve ter instalado no servidor a biblioteca [http://php.net/manual/en/book.curl.php cURL]<br/><br/>
+ 			$url         = 'http://www.plataformaparaformal:3000/api/list_paraformalidades';<br/>
+			$api_key     = 'SE';<br/>
+			$format      = 'json';<br/>
+			$parameters  = ' ';<br/>
+			$curl = curl_init();<br/>
+			curl_setopt($curl, CURLOPT_URL, $url.'?api_key='.$api_key.'&format='.$format.'&'.$parameters);<br/>
+			curl_setopt($curl, CURLOPT_HEADER, 0);<br/>
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);<br/>
+			$result = curl_exec($curl);<br/>
+			curl_close($curl);<br/>
+			$paraformalidades = json_decode($result);<br/>
+			if (isset($paraformalidades->status)){<br/>
+			    echo $paraformalidades->error;<br/>
+			}else{<br/>
+			   foreach($paraformalidades as $parafor){<br/>
+			        echo $parafor->id.' # '.$parafor->cod_parformalidade.' # '.$parafor->descricao.' # '.$parafor->tunno_id.' # '.$parafor->atividadeRegistradaId;<br/>
+			    }<br/>
+			}
+		</p>
+		<h2>NewDalhi:Retorno</h2>
+		<p> 
+			<h4>Formatos Suportados</h4>
+			XML  "application/xml" <br/>
+			JSON "application/json"
+		</p>
+		<p><h4>Exemplo de Retorno em JSON</h4>
+			Por padrão o método de retorno utilizado é JSON.<br/>
+			 [<br/>
+			  {"id":"1","paraformalidade":"1211","descricao":"Cena 2","turnoId":"2","atividadeRegistradaId":"1"},<br/>
+			  {"id":"2","paraformalidade":"3333","descricao":"Cena 12","turnoId":"1","atividadeRegistradaId":"1"}<br/>
+			 ]<br/>
+		</p>
+		<hr>
+		New Dalhi - <%= link_to "Plataforma Paraformal", "http://www.plataformaparaformal.com"%> - <%= Time.now.year %>
+	</body>
+
+</html>
+
