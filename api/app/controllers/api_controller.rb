@@ -5,7 +5,7 @@ class ApiController < ApplicationController
 		@service 	= "newDalhi"
 		@version 	= "1.0"
 		@developer 	= "Glauco Roberto Munsberg dos Santos"
-		@lastUpdate	= Time.new 2014,03,22
+		@lastUpdate	= Time.new 
 	end
 	
 	def index
@@ -53,7 +53,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"shift",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -71,7 +71,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"positionBody",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -89,7 +89,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"numberBody",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -107,7 +107,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"equipmentScale",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -125,7 +125,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"equipmentMobily",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -143,7 +143,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"equipmentInstalation",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -161,7 +161,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"registeredActivity",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -179,7 +179,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"climate",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -197,7 +197,7 @@ class ApiController < ApplicationController
 		rescue Exception => e
 			
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"localizationSpace",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -214,7 +214,7 @@ class ApiController < ApplicationController
 			}
 		rescue Exception => e
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"registeredAmount",
 				"status"=>"500",
 				"response"=>e.message
 			}
@@ -248,11 +248,95 @@ class ApiController < ApplicationController
 			}
 		rescue Exception => e
 			render json: {
-				"actionResponse"=>"sense",
+				"actionResponse"=>"environmentalCondition",
 				"status"=>"500",
 				"response"=>e.message
 			}
 		end
+	end
+
+	def personByEmail
+		begin
+			if params[:email] == nil
+				render json: {
+					"actionResponse"=>"getPersonByEmail",
+					"status"=>"400",
+					"response"=>"Send the email to get person"
+				}
+			else
+				person = People.where(:email => params[:email]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id")
+				render json:{
+					"actionResponse"=>"getPersonByEmail",
+					"status"=>"200",
+					"response"=>person
+				}
+			end 
+		rescue Exception => e
+			render json: {
+				"actionResponse"=>"getPersonByEmail",
+				"status"=>"500",
+				"response"=>e.message
+			}
+		end
+	end
+
+	def personById
+		begin
+			if params[:id] == nil
+				render json: {
+					"actionResponse"=>"getPersonByEmail",
+					"status"=>"400",
+					"response"=>"Send the id aurora (plataforma paraformal) to get person"
+				}
+			else
+				person = People.where(:id => params[:id]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id")
+				render json:{
+					"actionResponse"=>"getPersonByEmail",
+					"status"=>"200",
+					"response"=>person
+				}
+			end 
+		rescue Exception => e
+			render json: {
+				"actionResponse"=>"getPersonByEmail",
+				"status"=>"500",
+				"response"=>e.message
+			}
+		end
+	end
+
+	def setPersonBySocialConnection
+		if params[:name] == nil or params[:email] == nil or params[:social_connection] == nil or params[:social_connection_id] == nil or params[:gender] == nil
+				render json: {
+					"actionResponse"=>"getPersonByEmail",
+					"status"=>"400",
+					"response"=>"To send a person you need informat name,email,social_connection,social_connection,social_connection_id,gender"
+				}
+			else
+
+				person = People.where(email: params[:email])
+				Rails.logger.warn person.count
+				if person.count > 0
+					#People.where(email: params[:email]).limit(1).conexao_social = params[:social_connection]
+					#person.update(conexao_social_id: params[:social_connection_id].to_i)
+					
+					render json:{
+						"actionResponse"=>"setPersonBySocialConnection",
+						"status"=>"200",
+						"response"=>person
+					}
+				else
+					People.create(nome: params[:name],email: params[:email],conexao_social: params[:social_connection], conexao_social_id: params[:social_connection_id], sexo: params[:gender])
+					person = People.where(email: params[:email]).limit(1)
+					render json:{
+						"actionResponse"=>"setPersonBySocialConnection",
+						"status"=>"200",
+						"response"=>person
+					}
+				end
+				
+			end 
+		
 	end
 	
 	def isOnAir
@@ -276,7 +360,7 @@ class ApiController < ApplicationController
 				[
 					{"200"=>"Sucess(OK)"},
 					{"203"=>"The server successfully processed the request (Non-Authoritative Information)"},
-					{"400"=>"Invalid widget was reqested (Bad Request)"},
+					{"400"=>"Invalid widget was requested (Bad Request)"},
 					{"401"=>"Invalid authorization credentials (Unauthorized)"},
 					{"403"=>"Invalid timestamp in Date header (Forbidden)"},
 					{"404"=>"Unsupported method or format (Not Found)"},
