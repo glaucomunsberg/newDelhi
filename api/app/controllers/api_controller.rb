@@ -264,7 +264,7 @@ class ApiController < ApplicationController
 					"response"=>"Send the email to get person"
 				}
 			else
-				person = People.where(:email => params[:email]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id")
+				person = People.where(:email => params[:email]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id,email")
 				render json:{
 					"actionResponse"=>"getPersonByEmail",
 					"status"=>"200",
@@ -289,7 +289,7 @@ class ApiController < ApplicationController
 					"response"=>"Send the id aurora (plataforma paraformal) to get person"
 				}
 			else
-				person = People.where(:id => params[:id]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id")
+				person = People.where(:id => params[:id]).select("id, nome,sexo as genero,dt_nascimento,conexao_social,conexao_social_id,email")
 				render json:{
 					"actionResponse"=>"getPersonByEmail",
 					"status"=>"200",
@@ -308,7 +308,7 @@ class ApiController < ApplicationController
 	def setPersonBySocialConnection
 		if params[:name] == nil or params[:email] == nil or params[:social_connection] == nil or params[:social_connection_id] == nil or params[:gender] == nil
 				render json: {
-					"actionResponse"=>"getPersonByEmail",
+					"actionResponse"=>"setPersonBySocialConnection",
 					"status"=>"400",
 					"response"=>"To send a person you need informat name,email,social_connection,social_connection,social_connection_id,gender"
 				}
@@ -317,6 +317,9 @@ class ApiController < ApplicationController
 				person = People.where(email: params[:email])
 				Rails.logger.warn person.count
 				if person.count > 0
+					
+					#updateinformation
+					#
 					#People.where(email: params[:email]).limit(1).conexao_social = params[:social_connection]
 					#person.update(conexao_social_id: params[:social_connection_id].to_i)
 					
