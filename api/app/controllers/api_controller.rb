@@ -316,13 +316,18 @@ class ApiController < ApplicationController
 
 				person = People.where(email: params[:email])
 				Rails.logger.warn person.count
+				Rails.logger.warn person.first.id
 				if person.count > 0
 					
-					#updateinformation
-					#
-					#People.where(email: params[:email]).limit(1).conexao_social = params[:social_connection]
-					#person.update(conexao_social_id: params[:social_connection_id].to_i)
-					
+					#update information
+					conexao_social_id = params[:social_connection_id]
+					conexao_social = params[:social_connection]
+					id = person.first.id
+					if params[:social_connection] != "T"
+						People.find_by_sql(
+							"UPDATE public.pessoas SET conexao_social = '#{conexao_social}', conexao_social_id = '#{conexao_social_id}' WHERE id = #{id};"
+						)
+					end
 					render json:{
 						"actionResponse"=>"setPersonBySocialConnection",
 						"status"=>"200",
