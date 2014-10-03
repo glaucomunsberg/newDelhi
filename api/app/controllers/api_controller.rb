@@ -16,12 +16,24 @@ class ApiController < ApplicationController
 		end
 	end
 	
-	def paraformalidade
+	def paraformalidadeByLocalization
 		params.each do |key,value|
 		  Rails.logger.warn "Param #{key}: #{value}"
 		end
-		paraformalidade = Paraformalidade.limit 10
-		render json:paraformalidade
+		begin
+			paraformalidade = Paraformalidade.find(:all, :select=> "*" ,:conditions=>"estaativa = 'S'",:joins =>" INNER JOIN public.uploads on public.uploads.id = paraformal.paraformalidades.upload_id")
+			render json:{
+					"actionResponse"=>"paraformalidadeByLocalization",
+					"status"=>"200",
+					"response"=>paraformalidade
+				}
+		rescue Exception => e
+			render json: {
+				"actionResponse"=>"paraformalidadeByLocalization",
+				"status"=>"500",
+				"response"=>e.message
+			}
+		end
 	end
 	
 	def sense
