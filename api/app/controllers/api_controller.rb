@@ -16,6 +16,28 @@ class ApiController < ApplicationController
 		end
 	end
 	
+	def scenesByLocalization
+
+		params.each do |key,value|
+			Rails.logger.warn "Param #{key}: #{value}"
+		end
+		begin
+			scene = Scene.find(:all,:select => 'cenas.id, p.geo_latitude, p.geo_longitude, cenas.descricao', :conditions=>" estaativa = 'S' and estaativo = 'S'",:joins => "INNER JOIN paraformal.paraformalidades as p on p.id = (select para.id from paraformal.paraformalidades as para where para.cena_id = cenas.id order by dt_ocorrencia DESC limit 1)")
+			render json:{
+				"actionResponse"=>"scenesByLocalization",
+				"status"=>"200",
+				"response"=>scene
+			}
+		rescue Exception => e
+			render json:{
+				"actionResponse"=>"scenesByLocalization",
+				"status"=>"500",
+				"response"=>e.message
+			}
+		end
+	end
+
+	#Nao usado
 	def paraformalidadeByLocalization
 		params.each do |key,value|
 		  Rails.logger.warn "Param #{key}: #{value}"

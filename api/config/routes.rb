@@ -3,6 +3,7 @@ Api::Application.routes.draw do
   get "api/isOnAir"
   get "api/about"
   get "api/paraformalidadeByLocalization"
+  get "api/scenesByLocalization"
   get "api/scene"
   get "api/environmentalCondition"
   get "api/sense"
