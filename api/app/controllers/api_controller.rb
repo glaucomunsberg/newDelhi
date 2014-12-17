@@ -22,7 +22,7 @@ class ApiController < ApplicationController
 			Rails.logger.warn "Param #{key}: #{value}"
 		end
 		begin
-			scene = Scene.all(:select => 'cenas.id as cena_id, p.id as paraformalidade_id, p.geo_latitude, p.geo_longitude, cenas.descricao as cena_descricao, p.descricao as paraformalidade_descricao, p.turno_ocorrencia_id, p.atividade_registrada_id, p.espaco_localizacao_id, p.corpo_numero_id, p.corpo_posicao_id, p.equipamento_porte_id, p.equipamento_mobilidade_id, u.nome_gerado, p.link, cenas.dt_ocorrencia, p.dt_cadastro, p.quantidade_registrada_id, contribuicao_publica', :conditions=>" estaativa = 'S' and estaativo = 'S'",:joins => "INNER JOIN paraformal.paraformalidades as p on p.id = (select para.id from paraformal.paraformalidades as para where para.cena_id = cenas.id order by dt_ocorrencia DESC limit 1) INNER JOIN uploads as u on u.id = p.upload_id")
+			scene = Scene.all(:select => 'cenas.id as cena_id, p.id as paraformalidade_id, p.geo_latitude, p.geo_longitude, cenas.descricao as cena_descricao, p.descricao as paraformalidade_descricao, p.turno_ocorrencia_id, p.atividade_registrada_id, p.espaco_localizacao_id, p.corpo_numero_id, p.corpo_posicao_id, p.equipamento_porte_id, p.equipamento_mobilidade_id, u.nome_gerado, p.link, cenas.dt_ocorrencia, p.dt_cadastro, p.quantidade_registrada_id, p.contribuicao_publica', :conditions=>" estaativa = 'S' and estaativo = 'S'",:joins => "INNER JOIN paraformal.paraformalidades as p on p.id = (select para.id from paraformal.paraformalidades as para where para.cena_id = cenas.id order by dt_ocorrencia DESC limit 1) INNER JOIN uploads as u on u.id = p.upload_id")
 			render json:{
 				"actionResponse"=>"scenesByLocalization",
 				"status"=>"200",
